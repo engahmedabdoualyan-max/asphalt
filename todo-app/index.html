@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todo App - Local Storage</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1><i class="fas fa-tasks"></i> My Tasks</h1>
+                <p class="date-display" id="dateDisplay"></p>
+            </div>
+        </header>
+
+        <main>
+            <!-- Input Section -->
+            <div class="input-section">
+                <div class="input-wrapper">
+                    <input 
+                        type="text" 
+                        id="taskInput" 
+                        placeholder="Add a new task..."
+                        autocomplete="off"
+                    >
+                    <button id="addBtn" class="btn-add" title="Add task (Enter)">
+                        <i class="fas fa-plus"></i>
+                    </button>
+                </div>
+                
+                <div class="priority-category">
+                    <select id="prioritySelect" class="select-input">
+                        <option value="low">Low Priority</option>
+                        <option value="medium" selected>Medium Priority</option>
+                        <option value="high">High Priority</option>
+                    </select>
+                    <select id="categorySelect" class="select-input">
+                        <option value="work">Work</option>
+                        <option value="personal">Personal</option>
+                        <option value="shopping">Shopping</option>
+                        <option value="health">Health</option>
+                        <option value="other" selected>Other</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Filter Section -->
+            <div class="filter-section">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-filter="all">All</button>
+                    <button class="filter-btn" data-filter="active">Active</button>
+                    <button class="filter-btn" data-filter="completed">Completed</button>
+                </div>
+                <button id="clearCompletedBtn" class="btn-clear" title="Clear completed tasks">
+                    <i class="fas fa-trash-alt"></i> Clear Completed
+                </button>
+            </div>
+
+            <!-- Stats Section -->
+            <div class="stats-section">
+                <div class="stat">
+                    <span class="stat-label">Total:</span>
+                    <span class="stat-value" id="totalCount">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Completed:</span>
+                    <span class="stat-value" id="completedCount">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Active:</span>
+                    <span class="stat-value" id="activeCount">0</span>
+                </div>
+            </div>
+
+            <!-- Tasks List -->
+            <section class="tasks-section">
+                <ul id="taskList" class="task-list">
+                    <!-- Tasks will be added here by JavaScript -->
+                </ul>
+                <div id="emptyState" class="empty-state">
+                    <i class="fas fa-inbox"></i>
+                    <p>No tasks yet. Add one to get started!</p>
+                </div>
+            </section>
+        </main>
+
+        <!-- Footer -->
+        <footer>
+            <button id="exportBtn" class="btn-footer" title="Export tasks as JSON">
+                <i class="fas fa-download"></i> Export
+            </button>
+            <button id="importBtn" class="btn-footer" title="Import tasks from JSON">
+                <i class="fas fa-upload"></i> Import
+            </button>
+            <button id="clearAllBtn" class="btn-footer btn-danger" title="Delete all tasks">
+                <i class="fas fa-exclamation-triangle"></i> Clear All
+            </button>
+            <input type="file" id="importFile" accept=".json" style="display: none;">
+        </footer>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
