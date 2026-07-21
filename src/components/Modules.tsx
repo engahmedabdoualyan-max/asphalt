@@ -339,7 +339,7 @@ export function SparesModule(_props: { t: any }) {
   const categories = [...new Set(parts.map(p => p.category))];
 
   return (
-    <Section title="🔧 Spare Parts Warehouse" icon="🔧" action={
+    <Section title="🔧 Spare Parts" icon="🔧" action={
       <button onClick={()=>setShowAdd(true)} className="bg-gradient-to-l from-rose-500 to-rose-700 text-white font-bold px-4 py-2 rounded-lg shadow text-sm">+ Add Part</button>
     }>
       <div className="grid grid-cols-3 gap-3 mb-4">
