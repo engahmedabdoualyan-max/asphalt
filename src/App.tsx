@@ -642,7 +642,10 @@ export default function App() {
           
           {/* Contact Us Button */}
           <button 
-            onClick={() => window.location.href = 'mailto:info@fimtosoft.com'}
+            onClick={() => {
+              const contactModal = document.getElementById('contact-modal');
+              if (contactModal) contactModal.classList.remove('hidden');
+            }}
             className="group relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white p-4 rounded-full shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-110"
             title="اتصل بنا"
           >
@@ -651,6 +654,35 @@ export default function App() {
               اتصل بنا
             </div>
           </button>
+        </div>
+
+        {/* Contact Modal */}
+        <div id="contact-modal" className="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && document.getElementById('contact-modal')?.classList.add('hidden')}>
+          <div className="bg-slate-900 border border-blue-500/50 rounded-2xl shadow-2xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-bold text-blue-300">📧 اتصل بنا</h3>
+              <button onClick={() => document.getElementById('contact-modal')?.classList.add('hidden')} className="text-slate-400 hover:text-white text-lg">✕</button>
+            </div>
+            
+            <form id="contact-form" className="space-y-4">
+              <div>
+                <label className="block text-xs text-slate-300 mb-1">الاسم</label>
+                <input type="text" name="name" placeholder="أدخل اسمك" className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-300 mb-1">البريد الإلكتروني</label>
+                <input type="email" name="email" placeholder="example@email.com" className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500" />
+              </div>
+              <div>
+                <label className="block text-xs text-slate-300 mb-1">الرسالة</label>
+                <textarea name="message" placeholder="اكتب رسالتك..." className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm h-24 resize-none focus:outline-none focus:border-blue-500"></textarea>
+              </div>
+              <div className="flex gap-2">
+                <button type="submit" className="flex-1 bg-gradient-to-l from-blue-500 to-blue-700 text-white font-bold py-2 rounded-lg">إرسال</button>
+                <button type="button" onClick={() => document.getElementById('contact-modal')?.classList.add('hidden')} className="px-4 py-2 bg-slate-700 text-white rounded-lg">إلغاء</button>
+              </div>
+            </form>
+          </div>
         </div>
 
         {/* Rating Modal */}
