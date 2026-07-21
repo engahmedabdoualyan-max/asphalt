@@ -432,7 +432,7 @@ export function RepairsModule(_props: { t: any }) {
   };
 
   return (
-    <Section title="🛠️ Repair Requests & Work Orders" icon="🛠️" action={
+    <Section title="🛠️ Repairs" icon="🛠️" action={
       <button onClick={()=>setShowAdd(true)} className="bg-gradient-to-l from-indigo-500 to-purple-600 text-white font-bold px-4 py-2 rounded-lg shadow text-sm">+ New Request</button>
     }>
       <div className="grid grid-cols-4 gap-3 mb-4">
