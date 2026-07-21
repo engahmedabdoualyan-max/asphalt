@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
 import { DICTS, LANG_META, type Lang } from "./i18n";
 import { GuidelineMix } from "./components/GuidelineMix";
 import { DesignYourMix } from "./components/DesignYourMix";
