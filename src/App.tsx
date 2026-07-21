@@ -13,6 +13,7 @@ import {
 } from "./components/Modules";
 import { MarketingModule } from "./components/MarketingModule";
 import { useSettings } from "./store";
+import Modal from "./components/Modal";
 
 type Module = "dashboard" | "qc" | "production" | "fleet" | "inventory" | "spares" | "repairs" | "customers" | "orders" | "marketing" | "reports" | "settings";
 type QCTab = "guideline" | "design" | "approvals";
@@ -160,6 +161,19 @@ export default function App() {
   const [password, setPassword] = useState('');
   const [displayName, setDisplayName] = useState('');
 
+  // Modal states
+  const [showFeaturesModal, setShowFeaturesModal] = useState(false);
+  const [showUsageModal, setShowUsageModal] = useState(false);
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // Contact form state
+  const [contactName, setContactName] = useState('');
+  const [contactEmail, setContactEmail] = useState('');
+  const [contactMessage, setContactMessage] = useState('');
+  const [contactErrors, setContactErrors] = useState<{ name?: string; email?: string; message?: string }>({});
+
   // Firebase initialization
   const [firebaseApp] = useState(() => initializeApp({
     apiKey: "AIzaSyCZFp9LIpQ6NinNOlGgkla2aCSJD0eBSHE",
@@ -306,7 +320,7 @@ export default function App() {
     }
   };
 
-  // Update user activity
+   // Update user activity
   const updateUserActivity = async (userId: string) => {
     try {
       await setDoc(doc(db, 'users', userId), {
@@ -315,6 +329,42 @@ export default function App() {
       }, { merge: true });
     } catch (error) {
       console.error('Error updating user activity:', error);
+    }
+  };
+
+  // Contact form validation
+  const validateContactForm = () => {
+    const errors: { name?: string; email?: string; message?: string } = {};
+    if (!contactName.trim()) errors.name = 'الاسم مطلوب';
+    if (!contactEmail.trim()) {
+      errors.email = 'البريد الإلكتروني مطلوب';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+      errors.email = 'البريد الإلكتروني غير صالح';
+    }
+    if (!contactMessage.trim()) errors.message = 'الرسالة مطلوبة';
+    else if (contactMessage.length < 10) errors.message = 'الرسالة يجب أن تكون 10 أحرف على الأقل';
+    setContactErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  // Contact form submission
+  const handleContactSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!validateContactForm()) return;
+    setIsSubmitting(true);
+    try {
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      alert('✅ تم إرسال رسالتك بنجاح! سنتواصل معك قريبًا.');
+      setContactName('');
+      setContactEmail('');
+      setContactMessage('');
+      setContactErrors({});
+      setShowContactModal(false);
+    } catch (error) {
+      console.error('Error submitting contact form:', error);
+      alert('⚠️ حدث خطأ في إرسال الرسالة. يرجى المحاولة مرة أخرى.');
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -597,12 +647,10 @@ export default function App() {
         <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
           {/* Features Button */}
           <button 
-            onClick={() => {
-              const featuresModal = document.getElementById('features-modal');
-              if (featuresModal) featuresModal.classList.remove('hidden');
-            }}
+            onClick={() => setShowFeaturesModal(true)}
             className="group relative bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white p-4 rounded-full shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 hover:scale-110"
             title="مميزات الموقع"
+            aria-label="مميزات الموقع"
           >
             <span className="text-2xl">✨</span>
             <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
@@ -612,12 +660,10 @@ export default function App() {
           
           {/* Usage Guide */}
           <button 
-            onClick={() => {
-              const usageModal = document.getElementById('usage-modal');
-              if (usageModal) usageModal.classList.remove('hidden');
-            }}
+            onClick={() => setShowUsageModal(true)}
             className="group relative bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white p-4 rounded-full shadow-2xl hover:shadow-purple-500/30 transition-all duration-300 hover:scale-110"
             title="دليل الاستخدام"
+            aria-label="دليل الاستخدام"
           >
             <span className="text-2xl">📋</span>
             <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
@@ -627,12 +673,10 @@ export default function App() {
           
           {/* Rating System */}
           <button 
-            onClick={() => {
-              const ratingModal = document.getElementById('rating-modal');
-              if (ratingModal) ratingModal.classList.remove('hidden');
-            }}
+            onClick={() => setShowRatingModal(true)}
             className="group relative bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white p-4 rounded-full shadow-2xl hover:shadow-orange-500/30 transition-all duration-300 hover:scale-110"
             title="قيم تجربتك"
+            aria-label="قيم تجربتك"
           >
             <span className="text-2xl">⭐</span>
             <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
@@ -642,12 +686,10 @@ export default function App() {
           
           {/* Contact Us Button */}
           <button 
-            onClick={() => {
-              const contactModal = document.getElementById('contact-modal');
-              if (contactModal) contactModal.classList.remove('hidden');
-            }}
+            onClick={() => setShowContactModal(true)}
             className="group relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white p-4 rounded-full shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-110"
             title="اتصل بنا"
+            aria-label="اتصل بنا"
           >
             <span className="text-2xl">📧</span>
             <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
@@ -657,185 +699,230 @@ export default function App() {
         </div>
 
         {/* Contact Modal */}
-        <div id="contact-modal" className="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && document.getElementById('contact-modal')?.classList.add('hidden')}>
-          <div className="bg-slate-900 border border-blue-500/50 rounded-2xl shadow-2xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-blue-300">📧 اتصل بنا</h3>
-              <button onClick={() => document.getElementById('contact-modal')?.classList.add('hidden')} className="text-slate-400 hover:text-white text-lg">✕</button>
+        <Modal
+          isOpen={showContactModal}
+          onClose={() => setShowContactModal(false)}
+          title="📧 اتصل بنا"
+          borderColor="border-blue-500/50"
+          titleColor="text-blue-300"
+        >
+          <form onSubmit={handleContactSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs text-slate-300 mb-1" htmlFor="contact-name">الاسم</label>
+              <input
+                id="contact-name"
+                type="text"
+                value={contactName}
+                onChange={(e) => setContactName(e.target.value)}
+                placeholder="أدخل اسمك"
+                className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                aria-invalid={!!contactErrors.name}
+                aria-describedby={contactErrors.name ? "contact-name-error" : undefined}
+              />
+              {contactErrors.name && <p id="contact-name-error" className="text-xs text-rose-400 mt-1">{contactErrors.name}</p>}
             </div>
-            
-            <form id="contact-form" className="space-y-4">
-              <div>
-                <label className="block text-xs text-slate-300 mb-1">الاسم</label>
-                <input type="text" name="name" placeholder="أدخل اسمك" className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500" />
-              </div>
-              <div>
-                <label className="block text-xs text-slate-300 mb-1">البريد الإلكتروني</label>
-                <input type="email" name="email" placeholder="example@email.com" className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500" />
-              </div>
-              <div>
-                <label className="block text-xs text-slate-300 mb-1">الرسالة</label>
-                <textarea name="message" placeholder="اكتب رسالتك..." className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm h-24 resize-none focus:outline-none focus:border-blue-500"></textarea>
-              </div>
-              <div className="flex gap-2">
-                <button type="submit" className="flex-1 bg-gradient-to-l from-blue-500 to-blue-700 text-white font-bold py-2 rounded-lg">إرسال</button>
-                <button type="button" onClick={() => document.getElementById('contact-modal')?.classList.add('hidden')} className="px-4 py-2 bg-slate-700 text-white rounded-lg">إلغاء</button>
-              </div>
-            </form>
-          </div>
-        </div>
+            <div>
+              <label className="block text-xs text-slate-300 mb-1" htmlFor="contact-email">البريد الإلكتروني</label>
+              <input
+                id="contact-email"
+                type="email"
+                value={contactEmail}
+                onChange={(e) => setContactEmail(e.target.value)}
+                placeholder="example@email.com"
+                className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:outline-none focus:border-blue-500"
+                aria-invalid={!!contactErrors.email}
+                aria-describedby={contactErrors.email ? "contact-email-error" : undefined}
+              />
+              {contactErrors.email && <p id="contact-email-error" className="text-xs text-rose-400 mt-1">{contactErrors.email}</p>}
+            </div>
+            <div>
+              <label className="block text-xs text-slate-300 mb-1" htmlFor="contact-message">الرسالة</label>
+              <textarea
+                id="contact-message"
+                value={contactMessage}
+                onChange={(e) => setContactMessage(e.target.value)}
+                placeholder="اكتب رسالتك..."
+                className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm h-24 resize-none focus:outline-none focus:border-blue-500"
+                aria-invalid={!!contactErrors.message}
+                aria-describedby={contactErrors.message ? "contact-message-error" : undefined}
+              />
+              {contactErrors.message && <p id="contact-message-error" className="text-xs text-rose-400 mt-1">{contactErrors.message}</p>}
+            </div>
+            <div className="flex gap-2">
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="flex-1 bg-gradient-to-l from-blue-500 to-blue-700 text-white font-bold py-2 rounded-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                aria-busy={isSubmitting}
+              >
+                {isSubmitting ? 'جارٍ الإرسال...' : 'إرسال'}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowContactModal(false)}
+                className="px-4 py-2 bg-slate-700 text-white rounded-lg"
+              >
+                إلغاء
+              </button>
+            </div>
+          </form>
+        </Modal>
 
         {/* Rating Modal */}
-        <div id="rating-modal" className="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && document.getElementById('rating-modal')?.classList.add('hidden')}>
-          <div className="bg-slate-900 border border-orange-500/50 rounded-2xl shadow-2xl max-w-md w-full p-6" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-lg font-bold text-orange-300 mb-4">قيم تجربتك</h3>
-            <p className="text-sm text-slate-400 mb-4">كيف تجد نظام إدارة مصنع الأسفلت الذكي؟</p>
-            <div className="flex justify-center gap-2 mb-4">
-              {[1,2,3,4,5].map((star) => (
-                <button key={star} className="text-3xl text-slate-600 hover:text-orange-500 transition-colors">⭐</button>
-              ))}
-            </div>
-            <textarea placeholder="اكتب تعليقك (اختياري)..." className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm h-20 resize-none mb-4" />
-            <div className="flex gap-2">
-              <button onClick={() => document.getElementById('rating-modal')?.classList.add('hidden')} className="flex-1 bg-gradient-to-l from-orange-500 to-orange-600 text-white font-bold py-2 rounded-lg">إرسال التقييم</button>
-              <button onClick={() => document.getElementById('rating-modal')?.classList.add('hidden')} className="px-4 py-2 bg-slate-700 text-white rounded-lg">إلغاء</button>
-            </div>
+        <Modal
+          isOpen={showRatingModal}
+          onClose={() => setShowRatingModal(false)}
+          title="⭐ قيم تجربتك"
+          borderColor="border-orange-500/50"
+          titleColor="text-orange-300"
+        >
+          <p className="text-sm text-slate-400 mb-4">كيف تجد نظام إدارة مصنع الأسفلت الذكي؟</p>
+          <div className="flex justify-center gap-2 mb-4">
+            {[1,2,3,4,5].map((star) => (
+              <button key={star} className="text-3xl text-slate-600 hover:text-orange-500 transition-colors" aria-label={`تقييم ${star} نجوم`}>⭐</button>
+            ))}
           </div>
-        </div>
+          <textarea placeholder="اكتب تعليقك (اختياري)..." className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm h-20 resize-none mb-4" />
+          <div className="flex gap-2">
+            <button onClick={() => setShowRatingModal(false)} className="flex-1 bg-gradient-to-l from-orange-500 to-orange-600 text-white font-bold py-2 rounded-lg">إرسال التقييم</button>
+            <button onClick={() => setShowRatingModal(false)} className="px-4 py-2 bg-slate-700 text-white rounded-lg">إلغاء</button>
+          </div>
+        </Modal>
 
         {/* Features Modal */}
-        <div id="features-modal" className="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && document.getElementById('features-modal')?.classList.add('hidden')}>
-          <div className="bg-slate-900 border border-emerald-500/50 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-auto p-6" onClick={(e) => e.stopPropagation()}>
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-lg font-bold text-emerald-300">✨ مميزات نظام إدارة مصنع الأسفلت الذكي</h3>
-              <button onClick={() => document.getElementById('features-modal')?.classList.add('hidden')} className="text-slate-400 hover:text-white text-lg">✕</button>
+        <Modal
+          isOpen={showFeaturesModal}
+          onClose={() => setShowFeaturesModal(false)}
+          title="✨ مميزات نظام إدارة مصنع الأسفلت الذكي"
+          borderColor="border-emerald-500/50"
+          titleColor="text-emerald-300"
+        >
+          <div className="space-y-4">
+            <div>
+              <h4 className="text-emerald-200 font-bold mb-2">🏭 إدارة المصنع الكاملة</h4>
+              <ul className="text-xs text-slate-400 space-y-1">
+                <li>• لوحة تحكم موحدة بمؤشرات الأداء الرئيسية</li>
+                <li>• إدارة الإنتاج والباتشات والطوق الزمني</li>
+                <li>• مراقبة درجة الحرارة والمكونات</li>
+                <li>• تتبع حالة المصنع (تشغيل/خامد)</li>
+              </ul>
             </div>
             
-            <div className="space-y-4">
-              <div>
-                <h4 className="text-emerald-200 font-bold mb-2">🏭 إدارة المصنع الكاملة</h4>
-                <ul className="text-xs text-slate-400 space-y-1">
-                  <li>• لوحة تحكم موحدة بمؤشرات الأداء الرئيسية</li>
-                  <li>• إدارة الإنتاج والباتشات والطوق الزمني</li>
-                  <li>• مراقبة درجة الحرارة والمكونات</li>
-                  <li>• تتبع حالة المصنع (تشغيل/خامد)</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="text-emerald-200 font-bold mb-2">🚛 إدارة الأسطول</h4>
-                <ul className="text-xs text-slate-400 space-y-1">
-                  <li>• تسجيل وإدارة شاحنات التوصيل</li>
-                  <li>• تتبع حالة التحميل والتوصيل</li>
-                  <li>• إدارة السائقين والوجهات</li>
-                  <li>• إحصائيات التوصيل والطنية</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="text-emerald-200 font-bold mb-2">📦 إدارة المخزون</h4>
-                <ul className="text-xs text-slate-400 space-y-1">
-                  <li>• مراقبة مستويات المواد الخام</li>
-                  <li>• تنبيهات انخفاض المخزون</li>
-                  <li>• إدارة الشحن والتعبئة</li>
-                  <li>• تتبع قيمة المخزون الإجمالية</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="text-emerald-200 font-bold mb-2">🧪 جودة المراقبة والمعمل</h4>
-                <ul className="text-xs text-slate-400 space-y-1">
-                  <li>• تصميم خلطات أساسية ومخصصة</li>
-                  <li>• اختبارات مارشال وحسابات حجمية</li>
-                  <li>• إدارة الشهادات والاعتمادات</li>
-                  <li>• منحنيات التدرج الحبيبي</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="text-emerald-200 font-bold mb-2">🔧 الصيانة والإدارة</h4>
-                <ul className="text-xs text-slate-400 space-y-1">
-                  <li>• جدولة مهام الصيانة الوقائية</li>
-                  <li>• إدارة طلبات الإصلاح</li>
-                  <li>• مكتبة قطع الغيار</li>
-                  <li>• تتبع حالة الأعمال</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="text-emerald-200 font-bold mb-2">📊 التقارير والتصدير</h4>
-                <ul className="text-xs text-slate-400 space-y-1">
+            <div>
+              <h4 className="text-emerald-200 font-bold mb-2">🚛 إدارة الأسطول</h4>
+              <ul className="text-xs text-slate-400 space-y-1">
+                <li>• تسجيل وإدارة شاحنات التوصيل</li>
+                <li>• تتبع حالة التحميل والتوصيل</li>
+                <li>• إدارة السائقين والوجهات</li>
+                <li>• إحصائيات التوصيل والطنية</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="text-emerald-200 font-bold mb-2">📦 إدارة المخزون</h4>
+              <ul className="text-xs text-slate-400 space-y-1">
+                <li>• مراقبة مستويات المواد الخام</li>
+                <li>• تنبيهات انخفاض المخزون</li>
+                <li>• إدارة الشحن والتعبئة</li>
+                <li>• تتبع قيمة المخزون الإجمالية</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="text-emerald-200 font-bold mb-2">🧪 جودة المراقبة والمعمل</h4>
+              <ul className="text-xs text-slate-400 space-y-1">
+                <li>• تصميم خلطات أساسية ومخصصة</li>
+                <li>• اختبارات مارشال وحسابات حجمية</li>
+                <li>• إدارة الشهادات والاعتمادات</li>
+                <li>• منحنيات التدرج الحبيبي</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="text-emerald-200 font-bold mb-2">🔧 الصيانة والإدارة</h4>
+              <ul className="text-xs text-slate-400 space-y-1">
+                <li>• جدولة مهام الصيانة الوقائية</li>
+                <li>• إدارة طلبات الإصلاح</li>
+                <li>• مكتبة قطع الغيار</li>
+                <li>• تتبع حالة الأعمال</li>
+              </ul>
+            </div>
+            
+            <div>
+              <h4 className="text-emerald-200 font-bold mb-2">📊 التقارير والتصدير</h4>
+              <ul className="text-xs text-slate-400 space-y-1">
                 <li>• تقارير إنتاج يومية وأسبوعية</li>
-                  <li>• تصدير البيانات بصيغة JSON</li>
-                </ul>
-              </div>
-            </div>
-            
-            <div className="mt-4 text-center">
-              <p className="text-xs text-slate-500">جميع هذه الميزات متاحة الآن في إصدار تجريبي مجاني</p>
+                <li>• تصدير البيانات بصيغة JSON</li>
+              </ul>
             </div>
           </div>
-        </div>
+          
+          <div className="mt-4 text-center">
+            <p className="text-xs text-slate-500">جميع هذه الميزات متاحة الآن في إصدار تجريبي مجاني</p>
+          </div>
+        </Modal>
 
         {/* Usage Guide Modal */}
-        <div id="usage-modal" className="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && document.getElementById('usage-modal')?.classList.add('hidden')}>
-          <div className="bg-slate-900 border border-purple-500/50 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-auto p-6" onClick={(e) => e.stopPropagation()}>
-            <h3 className="text-lg font-bold text-purple-300 mb-4">دليل استخدام نظام إدارة مصنع الأسفلت</h3>
-            
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <h4 className="text-purple-200 font-bold mb-2">📊 التنقل الأساسي</h4>
-                <ul className="text-xs text-slate-400 space-y-1">
-                  <li><strong>اللوحة:</strong> نظرة عامة على مؤشرات الأداء الرئيسية</li>
-                  <li><strong>QC / المختبر:</strong> تصميم الخلطات، التحقق من الجودة</li>
-                  <li><strong>الإنتاج:</strong> تشغيل المصنع ومراقبة الخام</li>
-                  <li><strong>الأسطول:</strong> إدارة الشاحنات والتوصيل</li>
-                  <li><strong>المخزون:</strong> مراقبة المواد الخام والمكونات</li>
-                  <li><strong>الصيانة:</strong> جدولة الصيانة وقائمة الإصلاحات</li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="text-purple-200 font-bold mb-2">⚡ الميزات الأساسية</h4>
-                <ul className="text-xs text-slate-400 space-y-1">
-                  <li><strong>تخزين البيانات:</strong> حفظ جميع البيانات في المتصفح</li>
-                  <li><strong>إحصائيات اليوم:</strong> نظرة عامة على إنتاج اليوم</li>
-                  <li><strong>تنبيهات المخزون:</strong> تنبيهات انخفاض المخزون</li>
-                  <li><strong>الترجمة:</strong> دعم العربية والإنجليزية والأردية</li>
-                  <li><strong>تقارير التصنيع:</strong> تقارير PDF قابلة للطباعة</li>
-                  <li><strong>الاتصالات:</strong> زر الاتصال السريع والنقر</li>
-                </ul>
-              </div>
+        <Modal
+          isOpen={showUsageModal}
+          onClose={() => setShowUsageModal(false)}
+          title="📘 دليل استخدام نظام إدارة مصنع الأسفلت"
+          borderColor="border-purple-500/50"
+          titleColor="text-purple-300"
+        >
+          <div className="grid md:grid-cols-2 gap-4">
+            <div>
+              <h4 className="text-purple-200 font-bold mb-2">📊 التنقل الأساسي</h4>
+              <ul className="text-xs text-slate-400 space-y-1">
+                <li><strong>اللوحة:</strong> نظرة عامة على مؤشرات الأداء الرئيسية</li>
+                <li><strong>QC / المختبر:</strong> تصميم الخلطات، التحقق من الجودة</li>
+                <li><strong>الإنتاج:</strong> تشغيل المصنع ومراقبة الخام</li>
+                <li><strong>الأسطول:</strong> إدارة الشاحنات والتوصيل</li>
+                <li><strong>المخزون:</strong> مراقبة المواد الخام والمكونات</li>
+                <li><strong>الصيانة:</strong> جدولة الصيانة وقائمة الإصلاحات</li>
+              </ul>
             </div>
             
-            <div className="mt-4">
-              <h4 className="text-purple-200 font-bold mb-2">🔧 دليل سريع</h4>
-              <ol className="text-xs text-slate-400 space-y-1 list-decimal mr-4">
-                <li>اختر القسم من القائمة الجانبية أو اللوحة</li>
-                <li>استخدم أزرار التحكم السريع لإضافة معدات</li>
-                <li>انقر على الارتفاعات لتعديل الكميات</li>
-                <li>اطلع على تنبيهات المخزون في الوقت الفعلي</li>
-                <li>قم بتصدير البيانات في قسم التقارير</li>
-                <li>قم بتخصيص لغة المحطة من الشعار</li>
-              </ol>
-            </div>
-            
-            <div className="mt-4">
-              <h4 className="text-purple-200 font-bold mb-2">📞 الدعم والمساعدة</h4>
-              <div className="text-xs text-slate-400 space-y-1">
-                <p><strong>الموقع:</strong> منطقة الصناعة، السادات، المنوفية</p>
-                <p><strong>الهاتف:</strong> +2 01223456789</p>
-                <p><strong>البريد:</strong> info@asphaltplant.com</p>
-                <p><strong>العمل:</strong> السبت - الخميس 8:00 ص - 6:00 م</p>
-              </div>
-            </div>
-            
-            <div className="mt-4 flex gap-2">
-              <button onClick={() => document.getElementById('usage-modal')?.classList.add('hidden')} className="flex-1 bg-gradient-to-l from-purple-500 to-purple-700 text-white font-bold py-2 rounded-lg">فهمت</button>
-              <button onClick={() => document.getElementById('usage-modal')?.classList.add('hidden')} className="px-4 py-2 bg-slate-700 text-white rounded-lg">إغلاق</button>
+            <div>
+              <h4 className="text-purple-200 font-bold mb-2">⚡ الميزات الأساسية</h4>
+              <ul className="text-xs text-slate-400 space-y-1">
+                <li><strong>تخزين البيانات:</strong> حفظ جميع البيانات في المتصفح</li>
+                <li><strong>إحصائيات اليوم:</strong> نظرة عامة على إنتاج اليوم</li>
+                <li><strong>تنبيهات المخزون:</strong> تنبيهات انخفاض المخزون</li>
+                <li><strong>الترجمة:</strong> دعم العربية والإنجليزية والأردية</li>
+                <li><strong>تقارير التصنيع:</strong> تقارير PDF قابلة للطباعة</li>
+                <li><strong>الاتصالات:</strong> زر الاتصال السريع والنقر</li>
+              </ul>
             </div>
           </div>
-        </div>
+          
+          <div className="mt-4">
+            <h4 className="text-purple-200 font-bold mb-2">🔧 دليل سريع</h4>
+            <ol className="text-xs text-slate-400 space-y-1 list-decimal mr-4">
+              <li>اختر القسم من القائمة الجانبية أو اللوحة</li>
+              <li>استخدم أزرار التحكم السريع لإضافة معدات</li>
+              <li>انقر على الارتفاعات لتعديل الكميات</li>
+              <li>اطلع على تنبيهات المخزون في الوقت الفعلي</li>
+              <li>قم بتصدير البيانات في قسم التقارير</li>
+              <li>قم بتخصيص لغة المحطة من الشعار</li>
+            </ol>
+          </div>
+          
+          <div className="mt-4">
+            <h4 className="text-purple-200 font-bold mb-2">📞 الدعم والمساعدة</h4>
+            <div className="text-xs text-slate-400 space-y-1">
+              <p><strong>الموقع:</strong> منطقة الصناعة، السادات، المنوفية</p>
+              <p><strong>الهاتف:</strong> +2 01223456789</p>
+              <p><strong>البريد:</strong> info@asphaltplant.com</p>
+              <p><strong>العمل:</strong> السبت - الخميس 8:00 ص - 6:00 م</p>
+            </div>
+          </div>
+          
+          <div className="mt-4 flex gap-2">
+            <button onClick={() => setShowUsageModal(false)} className="flex-1 bg-gradient-to-l from-purple-500 to-purple-700 text-white font-bold py-2 rounded-lg">فهمت</button>
+            <button onClick={() => setShowUsageModal(false)} className="px-4 py-2 bg-slate-700 text-white rounded-lg">إغلاق</button>
+          </div>
+        </Modal>
       </main>
     </div>
   );
