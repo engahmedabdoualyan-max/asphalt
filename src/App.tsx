@@ -529,7 +529,69 @@ export default function App() {
           </>
         )}
 
-        <footer className="text-center text-slate-500 text-xs py-6 mt-6 border-t border-slate-800">{t.footer}</footer>
+        <footer className="border-t border-slate-800 mt-10">
+          <div className="bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900 py-12">
+            <div className="max-w-7xl mx-auto px-3 md:px-6">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                {/* Company Info */}
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center text-xl">
+                      💻
+                    </div>
+                    <div>
+                      <h3 className="text-xl font-black text-amber-300">Fimto Soft</h3>
+                      <p className="text-xs text-slate-400">Integrated Tech Solutions</p>
+                    </div>
+                  </div>
+                  <p className="text-xs text-slate-400 leading-relaxed">
+                    We provide comprehensive software solutions including advanced interactive ERP systems, 
+                    maintenance and development of ready-mix concrete plants, web design and development, 
+                    distinguished digital marketing, creation and development of security and surveillance systems, 
+                    establishment and development of infrastructure networks, creation and development of AI applications, 
+                    and establishment and development of smart home systems.
+                  </p>
+                </div>
+
+                {/* Quick Links */}
+                <div>
+                  <h4 className="text-amber-300 font-bold mb-4 text-sm">Quick Links</h4>
+                  <ul className="space-y-2">
+                    <li><a href="#" className="text-slate-400 hover:text-amber-300 text-xs transition">Contact</a></li>
+                    <li><a href="#" className="text-slate-400 hover:text-amber-300 text-xs transition">About Us</a></li>
+                    <li><a href="#" className="text-slate-400 hover:text-amber-300 text-xs transition">Services</a></li>
+                    <li><a href="#" className="text-slate-400 hover:text-amber-300 text-xs transition">Projects</a></li>
+                  </ul>
+                </div>
+
+                {/* Contact & Locations */}
+                <div>
+                  <h4 className="text-amber-300 font-bold mb-4 text-sm">Contact</h4>
+                  <div className="space-y-3">
+                    <div>
+                      <p className="text-xs text-slate-400">📧 info@fimtosoft.com</p>
+                    </div>
+                    <div>
+                      <p className="text-xs text-slate-400">EG: 01001006627</p>
+                      <p className="text-xs text-slate-400">KSA: 0500439617</p>
+                    </div>
+                    <div>
+                      <h5 className="text-xs text-slate-400 mb-2">Our Locations</h5>
+                      <div className="space-y-1">
+                        <p className="text-xs text-slate-400">🇪🇬 Cairo, Egypt</p>
+                        <p className="text-xs text-slate-400">🇸🇦 Riyadh, Saudi Arabia</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="border-t border-slate-800 mt-8 pt-4 text-center">
+                <p className="text-xs text-slate-500">{t.footer}</p>
+              </div>
+            </div>
+          </div>
+        </footer>
         
         {/* Floating Buttons */}
         <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
