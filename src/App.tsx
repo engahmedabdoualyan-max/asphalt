@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, User } from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, User, signInAnonymously } from "firebase/auth";
 import { getFirestore, collection, doc, setDoc, getDoc, serverTimestamp, query, orderBy, getDocs } from "firebase/firestore";
 import { DICTS, LANG_META, type Lang } from "./i18n";
 import { GuidelineMix } from "./components/GuidelineMix";
@@ -241,11 +241,25 @@ export default function App() {
   const signInAsGuest = async () => {
     setIsLoading(true);
     try {
-      const { signInAnonymously } = await import("firebase/auth");
-      const result = await signInAnonymously(auth);
-      return result.user;
-    } catch (error) {
+      // Try anonymous auth first, fall back to email/password if not enabled
+      try {
+        const result = await signInAnonymously(auth);
+        return result.user;
+      } catch (anonError: any) {
+        // If anonymous auth is not enabled, use email/password
+        if (anonError.code === 'auth/admin-restricted-operation') {
+          const { createUserWithEmailAndPassword } = await import("firebase/auth");
+          const guestEmail = `guest_${Date.now()}@asphalt-guest.com`;
+          const guestPassword = `guest_${Date.now()}`;
+          const result = await createUserWithEmailAndPassword(auth, guestEmail, guestPassword);
+          return result.user;
+        }
+        throw anonError;
+      }
+    } catch (error: any) {
       console.error('Error signing in as guest:', error);
+      // Show user-friendly error message
+      alert(`⚠️ خطأ في تسجيل الدخول كضيف: ${error.message || 'يرجى استخدام تسجيل الدخول بحساب Google بدلاً من ذلك'}`);
       throw error;
     } finally {
       setIsLoading(false);
