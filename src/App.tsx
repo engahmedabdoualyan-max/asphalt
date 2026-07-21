@@ -595,18 +595,6 @@ export default function App() {
         
         {/* Floating Buttons */}
         <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
-          {/* Contact Us Button */}
-          <button 
-            onClick={() => window.open('tel:+201234567890', '_self')}
-            className="group relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white p-4 rounded-full shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-110"
-            title="اتصل بنا"
-          >
-            <span className="text-2xl">📞</span>
-            <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-              اتصل بنا
-            </div>
-          </button>
-          
           {/* Features Button */}
           <button 
             onClick={() => {
@@ -649,6 +637,18 @@ export default function App() {
             <span className="text-2xl">⭐</span>
             <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
               قيم النظام
+            </div>
+          </button>
+          
+          {/* Contact Us Button */}
+          <button 
+            onClick={() => window.location.href = 'mailto:info@fimtosoft.com'}
+            className="group relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white p-4 rounded-full shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-110"
+            title="اتصل بنا"
+          >
+            <span className="text-2xl">📧</span>
+            <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+              اتصل بنا
             </div>
           </button>
         </div>
