@@ -121,7 +121,7 @@ export const MIX_CLASSES: Record<MixClass, MixClassDef> = {
       { key: "ns", pct: 16 },
       { key: "fl", pct: 6 },
     ],
-    specLow:  [100, 100, 100, 90, 70, 44, 28, 18, 13, 8, 5, 4],
+    specLow:  [100, 100, 95, 90, 70, 44, 28, 18, 13, 8, 5, 4],
     specHigh: [100, 100, 100, 100, 90, 74, 58, 42, 30, 22, 16, 8],
   },
 };
