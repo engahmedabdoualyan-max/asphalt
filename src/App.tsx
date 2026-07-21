@@ -237,6 +237,21 @@ export default function App() {
     }
   };
 
+  // Guest Sign In
+  const signInAsGuest = async () => {
+    setIsLoading(true);
+    try {
+      const { signInAnonymously } = await import("firebase/auth");
+      const result = await signInAnonymously(auth);
+      return result.user;
+    } catch (error) {
+      console.error('Error signing in as guest:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Update user activity
   const updateUserActivity = async (userId: string) => {
     try {
@@ -307,42 +322,80 @@ export default function App() {
       </header>
 
       <main className="max-w-7xl mx-auto px-3 md:px-6 py-5">
-        {module === "dashboard" && <DashboardModule t={t} onNavigate={(m) => setModule(m as Module)} />}
-
-        {module === "qc" && (
-          <div className="space-y-5">
-            <div className="bg-gradient-to-br from-purple-900/40 via-blue-900/30 to-slate-900 border border-purple-500/30 rounded-2xl p-4">
-              <div className="text-[10px] text-purple-300 uppercase tracking-widest mb-1">{t.navQC} — Quality Control / Lab</div>
-              <h2 className="text-lg font-black text-white">{qcTab === "guideline" ? t.qcGuidelineMix : qcTab === "design" ? t.qcDesignMix : t.qcApprovals}</h2>
-              <p className="text-xs text-slate-400 mt-1">{qcTab === "guideline" ? t.qcGuidelineHint : qcTab === "design" ? t.qcDesignHint : t.qcApprovalsHint}</p>
-            </div>
-            <div className="bg-slate-900/60 border border-slate-700/50 rounded-2xl p-1.5">
-              <div className="grid grid-cols-3 gap-1.5">
-                {([
-                  { key: "guideline" as QCTab, label: t.qcGuidelineMix, color: "from-blue-500 to-purple-600" },
-                  { key: "design" as QCTab, label: t.qcDesignMix, color: "from-emerald-500 to-teal-600" },
-                  { key: "approvals" as QCTab, label: t.qcApprovals, color: "from-amber-500 to-orange-600" },
-                ]).map(tab => (
-                  <button key={tab.key} onClick={() => setQcTab(tab.key)} className={`py-3 rounded-xl font-bold text-sm transition ${qcTab === tab.key ? `bg-gradient-to-l ${tab.color} text-white shadow-lg` : "text-slate-300 hover:bg-slate-800/60"}`}>{tab.label}</button>
-                ))}
+        {!user ? (
+          <div className="min-h-[60vh] flex items-center justify-center">
+            <div className="bg-gradient-to-br from-slate-900 via-blue-950/50 to-slate-900 border border-amber-500/30 rounded-2xl p-8 shadow-xl max-w-md w-full text-center">
+              <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center text-4xl shadow-lg">
+                🏗️
+              </div>
+              <h1 className="text-2xl font-black text-amber-300 mb-2">{t.title}</h1>
+              <p className="text-slate-400 text-sm mb-6">سجل الدخول للمتابعة إلى لوحة التحكم المصنع</p>
+              
+              <div className="space-y-3">
+                <button 
+                  onClick={signInWithGoogle} 
+                  disabled={isLoading}
+                  className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 text-white font-bold py-3 rounded-lg shadow-lg transition flex items-center justify-center gap-2"
+                >
+                  {isLoading ? 'جاري التسجيل...' : '🟢 دخول بحساب Google'}
+                </button>
+                
+                <button 
+                  onClick={signInAsGuest} 
+                  disabled={isLoading}
+                  className="w-full bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 disabled:opacity-50 text-white font-bold py-3 rounded-lg shadow-lg transition flex items-center justify-center gap-2"
+                >
+                  {isLoading ? 'جاري التسجيل...' : '👤 دخول كضيف'}
+                </button>
+              </div>
+              
+              <div className="mt-4 text-center">
+                <p className="text-xs text-slate-500">
+                  باستخدام هذا النظام، أنت توافق على <a href="#" className="text-amber-300">شروط الخدمة</a> و <a href="#" className="text-amber-300">سياسة الخصوصية</a>
+                </p>
               </div>
             </div>
-            {qcTab === "guideline" && <GuidelineMix t={t} />}
-            {qcTab === "design" && <DesignYourMix t={t} />}
-            {qcTab === "approvals" && <ApprovalsModule t={t} />}
           </div>
-        )}
+        ) : (
+          <>
+            {module === "dashboard" && <DashboardModule t={t} onNavigate={(m) => setModule(m as Module)} />}
 
-        {module === "production" && <ProductionModule t={t} />}
-        {module === "fleet" && <FleetModule t={t} />}
-        {module === "inventory" && <InventoryModule t={t} />}
-        {module === "spares" && <SparesModule t={t} />}
-        {module === "repairs" && <RepairsModule t={t} />}
-        {module === "customers" && <CustomersModule t={t} />}
-        {module === "orders" && <OrdersModule t={t} />}
-        {module === "marketing" && <MarketingModule t={t} />}
-        {module === "reports" && <ReportsModule t={t} />}
-        {module === "settings" && <SettingsModule t={t} />}
+            {module === "qc" && (
+              <div className="space-y-5">
+                <div className="bg-gradient-to-br from-purple-900/40 via-blue-900/30 to-slate-900 border border-purple-500/30 rounded-2xl p-4">
+                  <div className="text-[10px] text-purple-300 uppercase tracking-widest mb-1">{t.navQC} — Quality Control / Lab</div>
+                  <h2 className="text-lg font-black text-white">{qcTab === "guideline" ? t.qcGuidelineMix : qcTab === "design" ? t.qcDesignMix : t.qcApprovals}</h2>
+                  <p className="text-xs text-slate-400 mt-1">{qcTab === "guideline" ? t.qcGuidelineHint : qcTab === "design" ? t.qcDesignHint : t.qcApprovalsHint}</p>
+                </div>
+                <div className="bg-slate-900/60 border border-slate-700/50 rounded-2xl p-1.5">
+                  <div className="grid grid-cols-3 gap-1.5">
+                    {([
+                      { key: "guideline" as QCTab, label: t.qcGuidelineMix, color: "from-blue-500 to-purple-600" },
+                      { key: "design" as QCTab, label: t.qcDesignMix, color: "from-emerald-500 to-teal-600" },
+                      { key: "approvals" as QCTab, label: t.qcApprovals, color: "from-amber-500 to-orange-600" },
+                    ]).map(tab => (
+                      <button key={tab.key} onClick={() => setQcTab(tab.key)} className={`py-3 rounded-xl font-bold text-sm transition ${qcTab === tab.key ? `bg-gradient-to-l ${tab.color} text-white shadow-lg` : "text-slate-300 hover:bg-slate-800/60"}`}>{tab.label}</button>
+                    ))}
+                  </div>
+                </div>
+                {qcTab === "guideline" && <GuidelineMix t={t} />}
+                {qcTab === "design" && <DesignYourMix t={t} />}
+                {qcTab === "approvals" && <ApprovalsModule t={t} />}
+              </div>
+            )}
+
+            {module === "production" && <ProductionModule t={t} />}
+            {module === "fleet" && <FleetModule t={t} />}
+            {module === "inventory" && <InventoryModule t={t} />}
+            {module === "spares" && <SparesModule t={t} />}
+            {module === "repairs" && <RepairsModule t={t} />}
+            {module === "customers" && <CustomersModule t={t} />}
+            {module === "orders" && <OrdersModule t={t} />}
+            {module === "marketing" && <MarketingModule t={t} />}
+            {module === "reports" && <ReportsModule t={t} />}
+            {module === "settings" && <SettingsModule t={t} />}
+          </>
+        )}
 
         <footer className="text-center text-slate-500 text-xs py-6 mt-6 border-t border-slate-800">{t.footer}</footer>
         
