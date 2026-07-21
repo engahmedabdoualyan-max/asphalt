@@ -154,6 +154,10 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [displayName, setDisplayName] = useState('');
 
   // Firebase initialization
   const [firebaseApp] = useState(() => initializeApp({
@@ -266,6 +270,40 @@ export default function App() {
     }
   };
 
+  // Sign Up with Email/Password
+  const signUpWithEmail = async (email: string, password: string, displayName: string) => {
+    setIsLoading(true);
+    try {
+      const { createUserWithEmailAndPassword, updateProfile } = await import("firebase/auth");
+      const result = await createUserWithEmailAndPassword(auth, email, password);
+      // Update user profile with display name
+      await updateProfile(result.user, { displayName });
+      return result.user;
+    } catch (error: any) {
+      console.error('Error signing up:', error);
+      alert(`⚠️ خطأ في إنشاء الحساب: ${error.message || 'يرجى المحاولة مرة أخرى'}`);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Sign In with Email/Password
+  const signInWithEmail = async (email: string, password: string) => {
+    setIsLoading(true);
+    try {
+      const { signInWithEmailAndPassword } = await import("firebase/auth");
+      const result = await signInWithEmailAndPassword(auth, email, password);
+      return result.user;
+    } catch (error: any) {
+      console.error('Error signing in:', error);
+      alert(`⚠️ خطأ في تسجيل الدخول: ${error.message || 'يرجى التحقق من بيانات الاعتماد'}`);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   // Update user activity
   const updateUserActivity = async (userId: string) => {
     try {
@@ -338,24 +376,102 @@ export default function App() {
       <main className="max-w-7xl mx-auto px-3 md:px-6 py-5">
         {!user ? (
           <div className="min-h-[60vh] flex items-center justify-center">
-            <div className="bg-gradient-to-br from-slate-900 via-blue-950/50 to-slate-900 border border-amber-500/30 rounded-2xl p-8 shadow-xl max-w-md w-full text-center">
+            <div className="bg-gradient-to-br from-slate-900 via-blue-950/50 to-slate-900 border border-amber-500/30 rounded-2xl p-8 shadow-xl max-w-md w-full">
               <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center text-4xl shadow-lg">
                 🏗️
               </div>
-              <h1 className="text-2xl font-black text-amber-300 mb-2">{t.title}</h1>
-              <p className="text-slate-400 text-sm mb-6">سجل الدخول للمتابعة إلى لوحة التحكم المصنع</p>
+              <h1 className="text-2xl font-black text-amber-300 text-center mb-2">{t.title}</h1>
+              <p className="text-slate-400 text-sm text-center mb-6">سجل الدخول للمتابعة إلى لوحة التحكم المصنع</p>
               
+              {/* Auth Mode Toggle */}
+              <div className="flex justify-center mb-6">
+                <div className="inline-flex bg-slate-800/70 border border-slate-700 rounded-lg p-1">
+                  <button
+                    onClick={() => setAuthMode('login')}
+                    className={`px-4 py-2 text-sm font-bold rounded-md transition ${authMode === 'login' ? 'bg-amber-500 text-slate-900 shadow' : 'text-slate-400 hover:text-slate-200'}`}
+                  >
+                    تسجيل دخول
+                  </button>
+                  <button
+                    onClick={() => setAuthMode('signup')}
+                    className={`px-4 py-2 text-sm font-bold rounded-md transition ${authMode === 'signup' ? 'bg-amber-500 text-slate-900 shadow' : 'text-slate-400 hover:text-slate-200'}`}
+                  >
+                    إنشاء حساب
+                  </button>
+                </div>
+              </div>
+
+              {/* Email/Password Form */}
+              <div className="space-y-3 mb-4">
+                {authMode === 'signup' && (
+                  <div>
+                    <label className="block text-xs text-slate-400 mb-1">الاسم الكامل</label>
+                    <input
+                      type="text"
+                      value={displayName}
+                      onChange={(e) => setDisplayName(e.target.value)}
+                      placeholder="أدخل اسمك"
+                      className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:border-amber-400 outline-none"
+                    />
+                  </div>
+                )}
+                <div>
+                  <label className="block text-xs text-slate-400 mb-1">البريد الإلكتروني</label>
+                  <input
+                    type="email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder="example@email.com"
+                    className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:border-amber-400 outline-none"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs text-slate-400 mb-1">كلمة المرور</label>
+                  <input
+                    type="password"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder="••••••••"
+                    className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-white text-sm focus:border-amber-400 outline-none"
+                  />
+                </div>
+                <button
+                  onClick={() => {
+                    if (authMode === 'signup') {
+                      signUpWithEmail(email, password, displayName);
+                    } else {
+                      signInWithEmail(email, password);
+                    }
+                  }}
+                  disabled={isLoading || !email || !password}
+                  className="w-full bg-gradient-to-r from-amber-500 to-orange-600 hover:from-amber-400 hover:to-orange-500 disabled:opacity-50 text-slate-900 font-bold py-2.5 rounded-lg shadow-lg transition flex items-center justify-center gap-2"
+                >
+                  {isLoading ? 'جاري التسجيل...' : authMode === 'signup' ? 'إنشاء حساب' : 'تسجيل دخول'}
+                </button>
+              </div>
+
+              {/* Divider */}
+              <div className="relative my-4">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-slate-700"></div>
+                </div>
+                <div className="relative flex justify-center text-xs">
+                  <span className="bg-slate-900 px-2 text-slate-500">أو</span>
+                </div>
+              </div>
+
+              {/* Social Login Buttons */}
               <div className="space-y-3">
-                <button 
-                  onClick={signInWithGoogle} 
+                <button
+                  onClick={signInWithGoogle}
                   disabled={isLoading}
                   className="w-full bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 disabled:opacity-50 text-white font-bold py-3 rounded-lg shadow-lg transition flex items-center justify-center gap-2"
                 >
                   {isLoading ? 'جاري التسجيل...' : '🟢 دخول بحساب Google'}
                 </button>
                 
-                <button 
-                  onClick={signInAsGuest} 
+                <button
+                  onClick={signInAsGuest}
                   disabled={isLoading}
                   className="w-full bg-gradient-to-r from-slate-700 to-slate-800 hover:from-slate-600 hover:to-slate-700 disabled:opacity-50 text-white font-bold py-3 rounded-lg shadow-lg transition flex items-center justify-center gap-2"
                 >
