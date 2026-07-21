@@ -154,6 +154,7 @@ export default function App() {
   const [user, setUser] = useState<User | null>(null);
   const [userProfile, setUserProfile] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [authLoading, setAuthLoading] = useState(true);
   const [authMode, setAuthMode] = useState<'login' | 'signup'>('login');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -182,6 +183,7 @@ export default function App() {
       } else {
         setUserProfile(null);
       }
+      setAuthLoading(false);
     });
     return () => unsubscribe();
   }, [auth]);
@@ -543,15 +545,18 @@ export default function App() {
             </div>
           </button>
           
-          {/* WhatsApp Contact */}
+          {/* Features Button */}
           <button 
-            onClick={() => window.open('https://wa.me/201234567890', '_blank')}
-            className="group relative bg-gradient-to-r from-green-500 to-green-600 hover:from-green-600 hover:to-green-700 text-white p-4 rounded-full shadow-2xl hover:shadow-green-500/30 transition-all duration-300 hover:scale-110"
-            title="واتساب"
+            onClick={() => {
+              const featuresModal = document.getElementById('features-modal');
+              if (featuresModal) featuresModal.classList.remove('hidden');
+            }}
+            className="group relative bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white p-4 rounded-full shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 hover:scale-110"
+            title="مميزات الموقع"
           >
-            <span className="text-2xl">👤</span>
+            <span className="text-2xl">✨</span>
             <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-              واتساب
+              مميزات الموقع
             </div>
           </button>
           
@@ -600,6 +605,80 @@ export default function App() {
             <div className="flex gap-2">
               <button onClick={() => document.getElementById('rating-modal')?.classList.add('hidden')} className="flex-1 bg-gradient-to-l from-orange-500 to-orange-600 text-white font-bold py-2 rounded-lg">إرسال التقييم</button>
               <button onClick={() => document.getElementById('rating-modal')?.classList.add('hidden')} className="px-4 py-2 bg-slate-700 text-white rounded-lg">إلغاء</button>
+            </div>
+          </div>
+        </div>
+
+        {/* Features Modal */}
+        <div id="features-modal" className="hidden fixed inset-0 bg-black/70 backdrop-blur-sm z-50 flex items-center justify-center p-4" onClick={(e) => e.target === e.currentTarget && document.getElementById('features-modal')?.classList.add('hidden')}>
+          <div className="bg-slate-900 border border-emerald-500/50 rounded-2xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-auto p-6" onClick={(e) => e.stopPropagation()}>
+            <div className="flex justify-between items-center mb-4">
+              <h3 className="text-lg font-bold text-emerald-300">✨ مميزات نظام إدارة مصنع الأسفلت الذكي</h3>
+              <button onClick={() => document.getElementById('features-modal')?.classList.add('hidden')} className="text-slate-400 hover:text-white text-lg">✕</button>
+            </div>
+            
+            <div className="space-y-4">
+              <div>
+                <h4 className="text-emerald-200 font-bold mb-2">🏭 إدارة المصنع الكاملة</h4>
+                <ul className="text-xs text-slate-400 space-y-1">
+                  <li>• لوحة تحكم موحدة بمؤشرات الأداء الرئيسية</li>
+                  <li>• إدارة الإنتاج والباتشات والطوق الزمني</li>
+                  <li>• مراقبة درجة الحرارة والمكونات</li>
+                  <li>• تتبع حالة المصنع (تشغيل/خامد)</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="text-emerald-200 font-bold mb-2">🚛 إدارة الأسطول</h4>
+                <ul className="text-xs text-slate-400 space-y-1">
+                  <li>• تسجيل وإدارة شاحنات التوصيل</li>
+                  <li>• تتبع حالة التحميل والتوصيل</li>
+                  <li>• إدارة السائقين والوجهات</li>
+                  <li>• إحصائيات التوصيل والطنية</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="text-emerald-200 font-bold mb-2">📦 إدارة المخزون</h4>
+                <ul className="text-xs text-slate-400 space-y-1">
+                  <li>• مراقبة مستويات المواد الخام</li>
+                  <li>• تنبيهات انخفاض المخزون</li>
+                  <li>• إدارة الشحن والتعبئة</li>
+                  <li>• تتبع قيمة المخزون الإجمالية</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="text-emerald-200 font-bold mb-2">🧪 جودة المراقبة والمعمل</h4>
+                <ul className="text-xs text-slate-400 space-y-1">
+                  <li>• تصميم خلطات أساسية ومخصصة</li>
+                  <li>• اختبارات مارشال وحسابات حجمية</li>
+                  <li>• إدارة الشهادات والاعتمادات</li>
+                  <li>• منحنيات التدرج الحبيبي</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="text-emerald-200 font-bold mb-2">🔧 الصيانة والإدارة</h4>
+                <ul className="text-xs text-slate-400 space-y-1">
+                  <li>• جدولة مهام الصيانة الوقائية</li>
+                  <li>• إدارة طلبات الإصلاح</li>
+                  <li>• مكتبة قطع الغيار</li>
+                  <li>• تتبع حالة الأعمال</li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="text-emerald-200 font-bold mb-2">📊 التقارير والتصدير</h4>
+                <ul className="text-xs text-slate-400 space-y-1">
+                <li>• تقارير إنتاج يومية وأسبوعية</li>
+                  <li>• تصدير البيانات بصيغة JSON</li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="mt-4 text-center">
+              <p className="text-xs text-slate-500">جميع هذه الميزات متاحة الآن في إصدار تجريبي مجاني</p>
             </div>
           </div>
         </div>
