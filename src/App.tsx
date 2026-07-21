@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
+import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, User } from "firebase/auth";
+import { getFirestore, collection, doc, setDoc, getDoc, serverTimestamp, query, orderBy, getDocs } from "firebase/firestore";
 import { DICTS, LANG_META, type Lang } from "./i18n";
 import { GuidelineMix } from "./components/GuidelineMix";
 import { DesignYourMix } from "./components/DesignYourMix";
@@ -147,6 +149,105 @@ export default function App() {
     return saved && VALID_MODULES.includes(saved) ? saved : "dashboard";
   });
   const [qcTab, setQcTab] = useState<QCTab>("guideline");
+
+  // Firebase Auth & Firestore
+  const [user, setUser] = useState<User | null>(null);
+  const [userProfile, setUserProfile] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
+
+  // Firebase initialization
+  const [firebaseApp] = useState(() => initializeApp({
+    apiKey: "AIzaSyCZFp9LIpQ6NinNOlGgkla2aCSJD0eBSHE",
+    authDomain: "asphalt-e7497.firebaseapp.com",
+    projectId: "asphalt-e7497",
+    storageBucket: "asphalt-e7497.firebasestorage.app",
+    messagingSenderId: "895349888715",
+    appId: "1:895349888715:web:5819ff8d6eec8b81c92d4e",
+    measurementId: "G-CF3PSJTGS4"
+  }));
+
+  const auth = getAuth(firebaseApp);
+  const db = getFirestore(firebaseApp);
+
+  // Auth state listener
+  useEffect(() => {
+    const unsubscribe = onAuthStateChanged(auth, async (firebaseUser) => {
+      setUser(firebaseUser);
+      if (firebaseUser) {
+        await fetchUserProfile(firebaseUser.uid);
+      } else {
+        setUserProfile(null);
+      }
+    });
+    return () => unsubscribe();
+  }, [auth]);
+
+  // Fetch user profile from Firestore
+  const fetchUserProfile = async (userId: string) => {
+    try {
+      const userDoc = await getDoc(doc(db, 'users', userId));
+      if (userDoc.exists()) {
+        setUserProfile(userDoc.data());
+      } else {
+        // Create new user profile
+        const newProfile = {
+          uid: userId,
+          email: user?.email || "",
+          displayName: user?.displayName || "",
+          photoURL: user?.photoURL || "",
+          role: "user",
+          permissions: ["dashboard", "reports", "settings"],
+          createdAt: serverTimestamp(),
+          lastLogin: serverTimestamp()
+        };
+        await setDoc(doc(db, 'users', userId), newProfile);
+        setUserProfile(newProfile);
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
+  };
+
+  // Google Sign In
+  const signInWithGoogle = async () => {
+    setIsLoading(true);
+    try {
+      const provider = new GoogleAuthProvider();
+      provider.addScope('profile');
+      provider.addScope('email');
+      const result = await signInWithPopup(auth, provider);
+      return result.user;
+    } catch (error) {
+      console.error('Error signing in with Google:', error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Sign Out
+  const signOutUser = async () => {
+    setIsLoading(true);
+    try {
+      await signOut(auth);
+    } catch (error) {
+      console.error('Error signing out:', error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  // Update user activity
+  const updateUserActivity = async (userId: string) => {
+    try {
+      await setDoc(doc(db, 'users', userId), {
+        lastLogin: serverTimestamp(),
+        lastActive: serverTimestamp()
+      }, { merge: true });
+    } catch (error) {
+      console.error('Error updating user activity:', error);
+    }
+  };
 
   useEffect(() => { document.documentElement.lang = lang; document.documentElement.dir = LANG_META[lang].dir; document.title = t.title; localStorage.setItem(LANG_KEY, lang); }, [lang, t.title]);
   useEffect(() => { localStorage.setItem(MODULE_KEY, module); }, [module]);
