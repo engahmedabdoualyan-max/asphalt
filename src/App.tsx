@@ -400,19 +400,32 @@ export default function App() {
               <p className="text-[10px] text-slate-500 mt-0.5 hidden lg:block">{settings.country || "EG"} • {settings.currency || "EGP"}</p>
             </div>
           </div>
-          <div className="flex items-center gap-3 lg:flex-col lg:items-stretch">
-            <div className="inline-flex bg-slate-800/70 border border-slate-700 rounded-lg p-1">
-              {(Object.keys(LANG_META) as Lang[]).map((code) => (
-                <button key={code} onClick={() => setLang(code)} className={`px-2.5 py-1 text-xs font-bold rounded-md transition flex items-center gap-1 ${lang === code ? "bg-amber-500 text-slate-900 shadow" : "text-slate-300 hover:bg-slate-700"}`} title={LANG_META[code].name}>
-                  <span>{LANG_META[code].flag}</span><span className="hidden sm:inline">{LANG_META[code].name}</span>
-                </button>
-              ))}
-            </div>
-            <div className="text-center md:text-start hidden lg:block border-t border-slate-800 pt-3">
-              <div className="text-[9px] text-slate-400">{t.designedBy}</div>
-              <div className="text-amber-200 font-bold text-xs">{t.authorName}</div>
-            </div>
-          </div>
+           <div className="flex items-center gap-3 lg:flex-col lg:items-stretch">
+             <div className="relative inline-block">
+               <select
+                 value={lang}
+                 onChange={(e) => setLang(e.target.value as Lang)}
+                 className="appearance-none bg-slate-800/70 border border-slate-700 rounded-lg px-3 py-1.5 text-xs font-bold text-slate-300 focus:outline-none focus:ring-2 focus:ring-amber-500/50 focus:border-amber-500 transition cursor-pointer pr-8"
+                 title={t.setLanguage}
+                 aria-label={t.setLanguage}
+               >
+                 {(Object.keys(LANG_META) as Lang[]).map((code) => (
+                   <option key={code} value={code} className="bg-slate-900 text-slate-200">
+                     {LANG_META[code].flag} {LANG_META[code].name}
+                   </option>
+                 ))}
+               </select>
+               <div className="absolute inset-y-0 right-0 flex items-center px-2 pointer-events-none">
+                 <svg className="w-3 h-3 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                 </svg>
+               </div>
+             </div>
+             <div className="text-center md:text-start hidden lg:block border-t border-slate-800 pt-3">
+               <div className="text-[9px] text-slate-400">{t.designedBy}</div>
+               <div className="text-amber-200 font-bold text-xs">{t.authorName}</div>
+             </div>
+           </div>
         </div>
         <nav className="bg-slate-950/50 border-t border-slate-800 lg:bg-transparent lg:border-t-0 lg:px-4 lg:pb-5">
           <div className="px-2 md:px-4 flex overflow-x-auto scrollbar-none lg:px-0 lg:flex-col lg:overflow-visible lg:gap-1">
