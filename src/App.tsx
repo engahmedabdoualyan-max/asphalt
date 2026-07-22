@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, User, signInAnonymously } from "firebase/auth";
@@ -185,8 +185,8 @@ export default function App() {
     measurementId: "G-CF3PSJTGS4"
   }));
 
-  const auth = getAuth(firebaseApp);
-  const db = getFirestore(firebaseApp);
+  const auth = useMemo(() => getAuth(firebaseApp), [firebaseApp]);
+  const db = useMemo(() => getFirestore(firebaseApp), [firebaseApp]);
 
   // Auth state listener
   useEffect(() => {
@@ -439,7 +439,11 @@ export default function App() {
       </header>
 
       <main className="max-w-7xl mx-auto px-3 md:px-4 lg:px-6 py-4 md:py-5 pb-20 md:pb-5">
-        {!user ? (
+        {!user && authLoading ? (
+          <div className="min-h-[60vh] flex items-center justify-center">
+            <div className="w-12 h-12 border-4 border-amber-500/30 border-t-amber-500 rounded-full animate-spin"></div>
+          </div>
+        ) : !user ? (
           <div className="min-h-[60vh] flex items-center justify-center">
             <div className="bg-gradient-to-br from-slate-900 via-blue-950/50 to-slate-900 border border-amber-500/30 rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-xl max-w-md w-full mx-2">
               <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center text-4xl shadow-lg">
