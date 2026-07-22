@@ -1,12 +1,177 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Intelligent Asphalt Plant Management System</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+
+    <!-- Primary SEO Meta Tags -->
+    <title>Intelligent Asphalt Plant Management System | Fimto Soft</title>
+    <meta name="title" content="Intelligent Asphalt Plant Management System | Fimto Soft" />
+    <meta name="description" content="Smart asphalt plant management system for production control, quality control, fleet management, inventory, maintenance, and mix design. Built for asphalt plant operators and engineers." />
+    <meta name="keywords" content="asphalt plant, asphalt management, production control, quality control, fleet management, inventory management, maintenance, mix design, Marshall test, gradation, bitumen, asphalt batching, plant automation, construction software, Fimto Soft" />
+    <meta name="author" content="Dr. Ahmed Abdo Allyan" />
+    <meta name="publisher" content="Fimto Soft" />
+    <meta name="copyright" content="Fimto Soft" />
+    <meta name="revisit-after" content="7 days" />
+    <meta name="distribution" content="global" />
+    <meta name="rating" content="general" />
+    <meta name="language" content="en" />
+    <meta name="geo.region" content="EG" />
+    <meta name="geo.placement" content="Cairo, Egypt; Riyadh, Saudi Arabia" />
+    <meta name="geo.position" content="29.9668,31.2443" />
+    <meta name="ICBM" content="29.9668, 31.2443" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://asphalt.fimtosoft.com/" />
+    <meta property="og:title" content="Intelligent Asphalt Plant Management System | Fimto Soft" />
+    <meta property="og:description" content="Smart asphalt plant management system for production control, quality control, fleet management, inventory, maintenance, and mix design." />
+    <meta property="og:image" content="https://asphalt.fimtosoft.com/og-image.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:site_name" content="Fimto Soft" />
+    <meta property="og:locale" content="en_US" />
+    <meta property="og:locale:alternate" content="ar_EG" />
+    <meta property="og:locale:alternate" content="ru_RU" />
+    <meta property="og:locale:alternate" content="de_DE" />
+    <meta property="og:locale:alternate" content="fr_FR" />
+    <meta property="og:locale:alternate" content="zh_CN" />
+    <meta property="og:locale:alternate" content="fil_PH" />
+    <meta property="og:locale:alternate" content="ur_PK" />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://asphalt.fimtosoft.com/" />
+    <meta name="twitter:title" content="Intelligent Asphalt Plant Management System | Fimto Soft" />
+    <meta name="twitter:description" content="Smart asphalt plant management system for production control, quality control, fleet management, inventory, maintenance, and mix design." />
+    <meta name="twitter:image" content="https://asphalt.fimtosoft.com/og-image.png" />
+    <meta name="twitter:image:alt" content="Intelligent Asphalt Plant Management System" />
+    <meta name="twitter:site" content="@FimtoSoft" />
+    <meta name="twitter:creator" content="@FimtoSoft" />
+
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://asphalt.fimtosoft.com/" />
+
+    <!-- Alternate Language URLs -->
+    <link rel="alternate" hreflang="en" href="https://asphalt.fimtosoft.com/" />
+    <link rel="alternate" hreflang="ar" href="https://asphalt.fimtosoft.com/?lang=ar" />
+    <link rel="alternate" hreflang="ru" href="https://asphalt.fimtosoft.com/?lang=ru" />
+    <link rel="alternate" hreflang="de" href="https://asphalt.fimtosoft.com/?lang=de" />
+    <link rel="alternate" hreflang="fr" href="https://asphalt.fimtosoft.com/?lang=fr" />
+    <link rel="alternate" hreflang="zh" href="https://asphalt.fimtosoft.com/?lang=zh" />
+    <link rel="alternate" hreflang="fil" href="https://asphalt.fimtosoft.com/?lang=fil" />
+    <link rel="alternate" hreflang="ur" href="https://asphalt.fimtosoft.com/?lang=ur" />
+
+    <!-- Favicon and PWA -->
+    <link rel="icon" href="/favicon.ico" sizes="any" />
+    <link rel="icon" href="/favicon-16x16.png" sizes="16x16" />
+    <link rel="icon" href="/favicon-32x32.png" sizes="32x32" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#1e293b" />
+    <meta name="msapplication-TileColor" content="#1e293b" />
+    <meta name="msapplication-TileImage" content="/mstile-144x144.png" />
+
+    <!-- Preconnect to External Resources -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="preconnect" href="https://www.google-analytics.com" />
+    <link rel="preconnect" href="https://firebase.googleapis.com" />
+
+    <!-- Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet" />
+
+    <!-- Schema.org JSON-LD Structured Data -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebApplication",
+      "name": "Intelligent Asphalt Plant Management System",
+      "alternateName": "Asphalt Plant ERP",
+      "description": "Smart asphalt plant management system for production control, quality control, fleet management, inventory, maintenance, and mix design.",
+      "url": "https://asphalt.fimtosoft.com/",
+      "applicationCategory": "BusinessApplication",
+      "operatingSystem": "Any",
+      "offers": {
+        "@type": "Offer",
+        "price": "0",
+        "priceCurrency": "USD",
+        "description": "Free trial version available"
+      },
+      "author": {
+        "@type": "Person",
+        "name": "Dr. Ahmed Abdo Allyan",
+        "jobTitle": "Roads & Materials Engineering Consultant"
+      },
+      "publisher": {
+        "@type": "Organization",
+        "name": "Fimto Soft",
+        "url": "https://www.fimtosoft.com",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://asphalt.fimtosoft.com/logo.png"
+        },
+        "address": {
+          "@type": "PostalAddress",
+          "addressLocality": "Cairo",
+          "addressCountry": "EG"
+        },
+        "telephone": "+201234567890"
+      },
+      "keywords": "asphalt plant, asphalt management, production control, quality control, fleet management, inventory management, maintenance, mix design, Marshall test, gradation, bitumen, asphalt batching, plant automation, construction software",
+      "featureList": [
+        "Production Control & Batch Management",
+        "Quality Control & Laboratory Testing",
+        "Fleet Management & Delivery Tracking",
+        "Inventory Management & Alerts",
+        "Maintenance Scheduling",
+        "Asphalt Mix Design & Optimization",
+        "Marshall Stability & Flow Testing",
+        "Multi-language Support (8 Languages)",
+        "Real-time Dashboard & KPIs",
+        "Data Export & Reporting"
+      ]
+    }
+    </script>
+
+    <!-- Organization Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Fimto Soft",
+      "url": "https://www.fimtosoft.com",
+      "logo": "https://asphalt.fimtosoft.com/logo.png",
+      "sameAs": [
+        "https://www.facebook.com/fimtosoft",
+        "https://www.twitter.com/fimtosoft",
+        "https://www.linkedin.com/company/fimtosoft",
+        "https://www.youtube.com/fimtosoft"
+      ],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+201234567890",
+        "email": "info@fimtosoft.com",
+        "contactType": "customer service",
+        "availableLanguage": ["English", "Arabic", "Urdu"]
+      }
+    }
+    </script>
+
+    <!-- Website Schema -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "Intelligent Asphalt Plant Management System",
+      "url": "https://asphalt.fimtosoft.com/",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://asphalt.fimtosoft.com/?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
   </head>
   <body>
     <div id="root"></div>
