@@ -389,7 +389,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-gradient-to-b from-slate-950 via-slate-900 to-slate-950 lg:pl-72">
       <header className="bg-gradient-to-b from-slate-900 via-blue-950 to-slate-950 border-b border-amber-500/40 shadow-lg sticky top-0 z-40 lg:fixed lg:left-0 lg:top-0 lg:h-screen lg:w-72 lg:border-b-0 lg:border-r lg:border-amber-500/30 lg:overflow-y-auto">
-        <div className="px-4 md:px-6 py-3 flex flex-col md:flex-row items-center justify-between gap-3 lg:h-auto lg:flex-col lg:items-stretch lg:justify-start lg:gap-5 lg:p-5">
+        <div className="px-3 md:px-4 py-2.5 flex flex-col md:flex-row items-center justify-between gap-2.5 lg:h-auto lg:flex-col lg:items-stretch lg:justify-start lg:gap-4 lg:p-5">
           <div className="flex items-center gap-3 cursor-pointer lg:flex-col lg:items-start" onClick={() => setModule("dashboard")}>
             <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center text-2xl shadow-lg shrink-0 overflow-hidden">
               {settings.plantLogo ? <img src={settings.plantLogo} alt="Plant logo" className="h-full w-full object-contain bg-white p-1" /> : "🏗️"}
@@ -438,15 +438,15 @@ export default function App() {
         </nav>
       </header>
 
-      <main className="max-w-7xl mx-auto px-3 md:px-6 py-5">
+      <main className="max-w-7xl mx-auto px-3 md:px-4 lg:px-6 py-4 md:py-5 pb-20 md:pb-5">
         {!user ? (
           <div className="min-h-[60vh] flex items-center justify-center">
-            <div className="bg-gradient-to-br from-slate-900 via-blue-950/50 to-slate-900 border border-amber-500/30 rounded-2xl p-8 shadow-xl max-w-md w-full">
+            <div className="bg-gradient-to-br from-slate-900 via-blue-950/50 to-slate-900 border border-amber-500/30 rounded-xl sm:rounded-2xl p-6 sm:p-8 shadow-xl max-w-md w-full mx-2">
               <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center text-4xl shadow-lg">
                 🏗️
               </div>
               <h1 className="text-2xl font-black text-amber-300 text-center mb-2">{t.title}</h1>
-              <p className="text-slate-400 text-sm text-center mb-6">سجل الدخول للمتابعة إلى لوحة التحكم المصنع</p>
+              <p className="text-slate-400 text-sm text-center mb-6">{t.subtitle}</p>
               
               {/* Auth Mode Toggle */}
               <div className="flex justify-center mb-6">
@@ -595,78 +595,78 @@ export default function App() {
         <footer className="border-t border-slate-800 mt-10">
           <div className="bg-gradient-to-b from-slate-900 via-blue-950 to-slate-900 py-12">
             <div className="max-w-7xl mx-auto px-3 md:px-6">
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-                {/* Company Info */}
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center text-xl">
-                      💻
-                    </div>
-                    <div>
-                      <h3 className="text-xl font-black text-amber-300">Fimto Soft</h3>
-                      <p className="text-xs text-slate-400">Integrated Tech Solutions</p>
-                    </div>
+              <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {/* Company Info */}
+              <div>
+                <div className="flex items-center gap-3 mb-4">
+                  <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-600 flex items-center justify-center text-xl">
+                    💻
                   </div>
-                  <p className="text-xs text-slate-400 leading-relaxed">
-                    We provide comprehensive software solutions including advanced interactive ERP systems, 
-                    maintenance and development of ready-mix concrete plants, web design and development, 
-                    distinguished digital marketing, creation and development of security and surveillance systems, 
-                    establishment and development of infrastructure networks, creation and development of AI applications, 
-                    and establishment and development of smart home systems.
-                  </p>
+                  <div>
+                    <h3 className="text-xl font-black text-amber-300">Fimto Soft</h3>
+                    <p className="text-xs text-slate-400">Integrated Tech Solutions</p>
+                  </div>
                 </div>
+                <p className="text-xs text-slate-400 leading-relaxed">
+                  We provide comprehensive software solutions including advanced interactive ERP systems, 
+                  maintenance and development of ready-mix concrete plants, web design and development, 
+                  distinguished digital marketing, creation and development of security and surveillance systems, 
+                  establishment and development of infrastructure networks, creation and development of AI applications, 
+                  and establishment and development of smart home systems.
+                </p>
+              </div>
 
-                {/* Quick Links */}
-                <div>
-                  <h4 className="text-amber-300 font-bold mb-4 text-sm">Quick Links</h4>
-                  <ul className="space-y-2">
-                    <li><a href="#" className="text-slate-400 hover:text-amber-300 text-xs transition">Contact</a></li>
-                    <li><a href="#" className="text-slate-400 hover:text-amber-300 text-xs transition">About Us</a></li>
-                    <li><a href="#" className="text-slate-400 hover:text-amber-300 text-xs transition">Services</a></li>
-                    <li><a href="#" className="text-slate-400 hover:text-amber-300 text-xs transition">Projects</a></li>
-                  </ul>
-                </div>
+              {/* Quick Links */}
+              <div>
+                <h4 className="text-amber-300 font-bold mb-4 text-sm">Quick Links</h4>
+                <ul className="space-y-2">
+                  <li><a href="#" className="text-slate-400 hover:text-amber-300 text-xs transition">Contact</a></li>
+                  <li><a href="#" className="text-slate-400 hover:text-amber-300 text-xs transition">About Us</a></li>
+                  <li><a href="#" className="text-slate-400 hover:text-amber-300 text-xs transition">Services</a></li>
+                  <li><a href="#" className="text-slate-400 hover:text-amber-300 text-xs transition">Projects</a></li>
+                </ul>
+              </div>
 
-                {/* Contact & Locations */}
-                <div>
-                  <h4 className="text-amber-300 font-bold mb-4 text-sm">Contact</h4>
-                  <div className="space-y-3">
-                    <div>
-                      <p className="text-xs text-slate-400">📧 info@fimtosoft.com</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-slate-400">EG: 01001006627</p>
-                      <p className="text-xs text-slate-400">KSA: 0500439617</p>
-                    </div>
-                    <div>
-                      <h5 className="text-xs text-slate-400 mb-2">Our Locations</h5>
-                      <div className="space-y-1">
-                        <p className="text-xs text-slate-400">🇪🇬 Cairo, Egypt</p>
-                        <p className="text-xs text-slate-400">🇸🇦 Riyadh, Saudi Arabia</p>
-                      </div>
+              {/* Contact & Locations */}
+              <div>
+                <h4 className="text-amber-300 font-bold mb-4 text-sm">Contact</h4>
+                <div className="space-y-3">
+                  <div>
+                    <p className="text-xs text-slate-400">📧 info@fimtosoft.com</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-slate-400">EG: 01001006627</p>
+                    <p className="text-xs text-slate-400">KSA: 0500439617</p>
+                  </div>
+                  <div>
+                    <h5 className="text-xs text-slate-400 mb-2">Our Locations</h5>
+                    <div className="space-y-1">
+                      <p className="text-xs text-slate-400">🇪🇬 Cairo, Egypt</p>
+                      <p className="text-xs text-slate-400">🇸🇦 Riyadh, Saudi Arabia</p>
                     </div>
                   </div>
                 </div>
               </div>
+            </div>
 
-              <div className="border-t border-slate-800 mt-8 pt-4 text-center">
-                <p className="text-xs text-slate-500">{t.footer}</p>
+              <div className="border-t border-slate-800 mt-6 pt-4 text-center">
+                <p className="text-[10px] text-slate-500">{t.footer}</p>
               </div>
             </div>
           </div>
         </footer>
         
-        {/* Floating Buttons */}
-        <div className="fixed bottom-6 right-6 flex flex-col gap-3 z-50">
+        {/* Floating Buttons - Mobile Optimized */}
+        <div className="fixed bottom-4 right-4 flex flex-col gap-2.5 z-50 sm:bottom-6 sm:right-6 sm:gap-3">
           {/* Features Button */}
           <button 
             onClick={() => setShowFeaturesModal(true)}
-            className="group relative bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white p-4 rounded-full shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 hover:scale-110"
+            className="group relative bg-gradient-to-r from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 text-white p-3 sm:p-4 rounded-full shadow-2xl hover:shadow-emerald-500/30 transition-all duration-300 hover:scale-110"
             title="مميزات الموقع"
             aria-label="مميزات الموقع"
           >
-            <span className="text-2xl">✨</span>
-            <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            <span className="text-xl sm:text-2xl">✨</span>
+            <div className="absolute right-full mr-2 sm:mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
               مميزات الموقع
             </div>
           </button>
@@ -674,12 +674,12 @@ export default function App() {
           {/* Usage Guide */}
           <button 
             onClick={() => setShowUsageModal(true)}
-            className="group relative bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white p-4 rounded-full shadow-2xl hover:shadow-purple-500/30 transition-all duration-300 hover:scale-110"
+            className="group relative bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 text-white p-3 sm:p-4 rounded-full shadow-2xl hover:shadow-purple-500/30 transition-all duration-300 hover:scale-110"
             title="دليل الاستخدام"
             aria-label="دليل الاستخدام"
           >
-            <span className="text-2xl">📋</span>
-            <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            <span className="text-xl sm:text-2xl">📋</span>
+            <div className="absolute right-full mr-2 sm:mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
               دليل الاستخدام
             </div>
           </button>
@@ -687,12 +687,12 @@ export default function App() {
           {/* Rating System */}
           <button 
             onClick={() => setShowRatingModal(true)}
-            className="group relative bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white p-4 rounded-full shadow-2xl hover:shadow-orange-500/30 transition-all duration-300 hover:scale-110"
+            className="group relative bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white p-3 sm:p-4 rounded-full shadow-2xl hover:shadow-orange-500/30 transition-all duration-300 hover:scale-110"
             title="قيم تجربتك"
             aria-label="قيم تجربتك"
           >
-            <span className="text-2xl">⭐</span>
-            <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            <span className="text-xl sm:text-2xl">⭐</span>
+            <div className="absolute right-full mr-2 sm:mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
               قيم النظام
             </div>
           </button>
@@ -700,12 +700,12 @@ export default function App() {
           {/* Contact Us Button */}
           <button 
             onClick={() => setShowContactModal(true)}
-            className="group relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white p-4 rounded-full shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-110"
+            className="group relative bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white p-3 sm:p-4 rounded-full shadow-2xl hover:shadow-blue-500/30 transition-all duration-300 hover:scale-110"
             title="اتصل بنا"
             aria-label="اتصل بنا"
           >
-            <span className="text-2xl">📧</span>
-            <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-3 py-2 rounded-lg text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+            <span className="text-xl sm:text-2xl">📧</span>
+            <div className="absolute right-full mr-2 sm:mr-3 top-1/2 -translate-y-1/2 bg-slate-900 text-white px-2 sm:px-3 py-1 sm:py-2 rounded-lg text-xs sm:text-sm whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
               اتصل بنا
             </div>
           </button>
